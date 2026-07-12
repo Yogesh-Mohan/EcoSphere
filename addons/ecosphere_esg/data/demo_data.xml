@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="user_esg_manager_demo" model="res.users">
+        <field name="name">EcoSphere Manager</field>
+        <field name="login">esg_manager</field>
+        <field name="password">esg_manager</field>
+        <field name="email">esg.manager@example.local</field>
+        <field name="group_ids" eval="[(4, ref('base.group_user')), (4, ref('ecosphere_esg.group_esg_manager'))]"/>
+    </record>
+    <record id="user_esg_auditor_demo" model="res.users">
+        <field name="name">EcoSphere Auditor</field>
+        <field name="login">esg_auditor</field>
+        <field name="password">esg_auditor</field>
+        <field name="email">esg.auditor@example.local</field>
+        <field name="group_ids" eval="[(4, ref('base.group_user')), (4, ref('ecosphere_esg.group_esg_auditor'))]"/>
+    </record>
+    <record id="user_esg_employee_demo" model="res.users">
+        <field name="name">EcoSphere Employee</field>
+        <field name="login">esg_employee</field>
+        <field name="password">esg_employee</field>
+        <field name="email">esg.employee@example.local</field>
+        <field name="group_ids" eval="[(4, ref('base.group_user')), (4, ref('ecosphere_esg.group_esg_employee'))]"/>
+    </record>
+
+    <record id="dept_operations" model="hr.department"><field name="name">Operations</field><field name="esg_manager_id" ref="user_esg_manager_demo"/></record>
+    <record id="dept_manufacturing" model="hr.department"><field name="name">Manufacturing</field><field name="esg_manager_id" ref="user_esg_manager_demo"/></record>
+    <record id="dept_people" model="hr.department"><field name="name">People and Culture</field><field name="esg_manager_id" ref="user_esg_manager_demo"/></record>
+
+    <record id="emp_manager" model="hr.employee"><field name="name">Maya ESG Manager</field><field name="user_id" ref="user_esg_manager_demo"/><field name="department_id" ref="dept_operations"/><field name="work_email">esg.manager@example.local</field></record>
+    <record id="emp_auditor" model="hr.employee"><field name="name">Arun ESG Auditor</field><field name="user_id" ref="user_esg_auditor_demo"/><field name="department_id" ref="dept_people"/><field name="work_email">esg.auditor@example.local</field></record>
+    <record id="emp_employee" model="hr.employee"><field name="name">Neha Eco Champion</field><field name="user_id" ref="user_esg_employee_demo"/><field name="department_id" ref="dept_operations"/><field name="work_email">esg.employee@example.local</field></record>
+    <record id="emp_01" model="hr.employee"><field name="name">Ravi Iyer</field><field name="department_id" ref="dept_operations"/></record>
+    <record id="emp_02" model="hr.employee"><field name="name">Sara Khan</field><field name="department_id" ref="dept_operations"/></record>
+    <record id="emp_03" model="hr.employee"><field name="name">Dev Sharma</field><field name="department_id" ref="dept_manufacturing"/></record>
+    <record id="emp_04" model="hr.employee"><field name="name">Leah George</field><field name="department_id" ref="dept_manufacturing"/></record>
+    <record id="emp_05" model="hr.employee"><field name="name">Asha Menon</field><field name="department_id" ref="dept_manufacturing"/></record>
+    <record id="emp_06" model="hr.employee"><field name="name">Kabir Rao</field><field name="department_id" ref="dept_people"/></record>
+    <record id="emp_07" model="hr.employee"><field name="name">Ira Patel</field><field name="department_id" ref="dept_people"/></record>
+
+    <record id="cat_environment" model="ecosphere.esg.category"><field name="name">Energy Efficiency</field><field name="category_type">environmental</field></record>
+    <record id="cat_csr" model="ecosphere.esg.category"><field name="name">Community Volunteering</field><field name="category_type">csr</field></record>
+    <record id="cat_challenge" model="ecosphere.esg.category"><field name="name">Low Waste Challenge</field><field name="category_type">challenge</field></record>
+    <record id="cat_governance" model="ecosphere.esg.category"><field name="name">Ethics and Compliance</field><field name="category_type">governance</field></record>
+
+    <record id="factor_grid_power" model="ecosphere.emission.factor"><field name="name">Grid electricity India</field><field name="activity_type">electricity</field><field name="source_module">manual</field><field name="scope">scope2</field><field name="factor_value">0.82</field><field name="input_unit">kWh</field><field name="output_unit">kgCO2e</field><field name="reference">Demo factor</field></record>
+    <record id="factor_diesel" model="ecosphere.emission.factor"><field name="name">Diesel fuel</field><field name="activity_type">fuel</field><field name="source_module">fleet</field><field name="scope">scope1</field><field name="factor_value">2.68</field><field name="input_unit">litre</field><field name="output_unit">kgCO2e</field><field name="reference">Demo factor</field></record>
+    <record id="factor_material" model="ecosphere.emission.factor"><field name="name">Recycled packaging material</field><field name="activity_type">material</field><field name="source_module">purchase</field><field name="scope">scope3</field><field name="factor_value">1.15</field><field name="input_unit">unit</field><field name="output_unit">kgCO2e</field><field name="reference">Demo factor</field></record>
+    <record id="factor_travel" model="ecosphere.emission.factor"><field name="name">Business travel km</field><field name="activity_type">travel</field><field name="source_module">hr_expense</field><field name="scope">scope3</field><field name="factor_value">0.19</field><field name="input_unit">km</field><field name="output_unit">kgCO2e</field><field name="reference">Demo factor</field></record>
+
+    <record id="product_packaging" model="product.product"><field name="name">Eco Packaging Kit</field></record>
+    <record id="product_profile_packaging" model="ecosphere.product.esg.profile"><field name="product_id" ref="product_packaging"/><field name="default_emission_factor_id" ref="factor_material"/><field name="recycled_material_percentage">72</field><field name="sustainable_certification">FSC Demo</field><field name="supplier_sustainability_rating">a</field></record>
+
+    <record id="carbon_manual_power" model="ecosphere.carbon.transaction"><field name="date">2026-07-01</field><field name="department_id" ref="dept_operations"/><field name="employee_id" ref="emp_employee"/><field name="activity_type">electricity</field><field name="activity_quantity">1200</field><field name="activity_unit">kWh</field><field name="emission_factor_id" ref="factor_grid_power"/><field name="verification_status">verified</field><field name="verified_by_id" ref="user_esg_manager_demo"/></record>
+    <record id="carbon_fleet_demo" model="ecosphere.carbon.transaction"><field name="date">2026-07-02</field><field name="department_id" ref="dept_operations"/><field name="activity_type">fuel</field><field name="activity_quantity">85</field><field name="activity_unit">litre</field><field name="emission_factor_id" ref="factor_diesel"/><field name="verification_status">verified</field><field name="verified_by_id" ref="user_esg_manager_demo"/></record>
+    <record id="carbon_material_demo" model="ecosphere.carbon.transaction"><field name="date">2026-07-03</field><field name="department_id" ref="dept_manufacturing"/><field name="activity_type">material</field><field name="activity_quantity">340</field><field name="activity_unit">unit</field><field name="emission_factor_id" ref="factor_material"/><field name="verification_status">calculated</field></record>
+
+    <record id="goal_operations_energy" model="ecosphere.environmental.goal"><field name="name">Reduce operations energy CO2e</field><field name="department_id" ref="dept_operations"/><field name="metric">co2e</field><field name="baseline_value">1800</field><field name="target_value">1200</field><field name="start_date">2026-07-01</field><field name="end_date">2026-12-31</field><field name="current_value">1211.8</field><field name="status">on_track</field></record>
+    <record id="goal_manufacturing_material" model="ecosphere.environmental.goal"><field name="name">Reduce material footprint</field><field name="department_id" ref="dept_manufacturing"/><field name="metric">co2e</field><field name="baseline_value">900</field><field name="target_value">600</field><field name="start_date">2026-07-01</field><field name="end_date">2026-12-31</field><field name="current_value">391</field><field name="status">achieved</field></record>
+
+    <record id="csr_cleanup" model="ecosphere.csr.activity"><field name="name">Lake cleanup drive</field><field name="category_id" ref="cat_csr"/><field name="organizer_id" ref="user_esg_manager_demo"/><field name="department_id" ref="dept_people"/><field name="start_date">2026-07-20 09:00:00</field><field name="end_date">2026-07-20 12:00:00</field><field name="maximum_participants">25</field><field name="evidence_required">True</field><field name="points">25</field><field name="state">open</field></record>
+    <record id="csr_tree" model="ecosphere.csr.activity"><field name="name">Urban tree mapping</field><field name="category_id" ref="cat_csr"/><field name="organizer_id" ref="user_esg_manager_demo"/><field name="department_id" ref="dept_operations"/><field name="start_date">2026-07-25 10:00:00</field><field name="end_date">2026-07-25 15:00:00</field><field name="points">20</field><field name="state">open</field></record>
+    <record id="csr_participation_employee" model="ecosphere.csr.participation"><field name="activity_id" ref="csr_cleanup"/><field name="employee_id" ref="emp_employee"/><field name="completion_date">2026-07-20 12:30:00</field><field name="approval_status">approved</field><field name="points_awarded">25</field></record>
+
+    <record id="challenge_zero_waste" model="ecosphere.challenge"><field name="name">Zero landfill week</field><field name="category_id" ref="cat_challenge"/><field name="xp">40</field><field name="difficulty">medium</field><field name="start_date">2026-07-15</field><field name="deadline">2026-07-31</field><field name="responsible_manager_id" ref="user_esg_manager_demo"/><field name="applicable_department_ids" eval="[(4, ref('dept_operations')), (4, ref('dept_manufacturing'))]"/><field name="status">active</field></record>
+    <record id="challenge_participation_employee" model="ecosphere.challenge.participation"><field name="challenge_id" ref="challenge_zero_waste"/><field name="employee_id" ref="emp_employee"/><field name="progress_percentage">100</field><field name="submission_date">2026-07-22 10:00:00</field><field name="approval_state">approved</field><field name="reviewer_id" ref="user_esg_manager_demo"/><field name="xp_awarded">40</field></record>
+
+    <record id="policy_ethics" model="ecosphere.esg.policy"><field name="name">Supplier ethics and anti-bribery policy</field><field name="policy_code">GOV-001</field><field name="version">1.0</field><field name="category_id" ref="cat_governance"/><field name="description">Demo policy for supplier ethics, anti-bribery controls, and reporting.</field><field name="publish_date">2026-07-01</field><field name="effective_date">2026-07-01</field><field name="review_date">2026-12-31</field><field name="owner_id" ref="user_esg_manager_demo"/><field name="state">published</field><field name="applicable_department_ids" eval="[(4, ref('dept_operations')), (4, ref('dept_manufacturing')), (4, ref('dept_people'))]"/></record>
+    <record id="ack_employee_policy" model="ecosphere.policy.acknowledgement"><field name="policy_id" ref="policy_ethics"/><field name="employee_id" ref="emp_employee"/><field name="policy_version">1.0</field><field name="assigned_date">2026-07-01</field><field name="acknowledgement_date">2026-07-05 09:00:00</field><field name="status">acknowledged</field><field name="employee_confirmation">True</field></record>
+    <record id="ack_pending_policy" model="ecosphere.policy.acknowledgement"><field name="policy_id" ref="policy_ethics"/><field name="employee_id" ref="emp_03"/><field name="policy_version">1.0</field><field name="assigned_date">2026-07-01</field><field name="status">pending</field></record>
+
+    <record id="audit_supplier" model="ecosphere.audit"><field name="name">Supplier compliance review</field><field name="audit_type">governance</field><field name="auditor_id" ref="user_esg_auditor_demo"/><field name="department_id" ref="dept_operations"/><field name="scope">Supplier onboarding controls and evidence.</field><field name="start_date">2026-07-10</field><field name="end_date">2026-07-18</field><field name="status">review</field><field name="result">Two findings raised for corrective action.</field></record>
+    <record id="issue_supplier_evidence" model="ecosphere.compliance.issue"><field name="name">Missing supplier sustainability evidence</field><field name="audit_id" ref="audit_supplier"/><field name="department_id" ref="dept_operations"/><field name="severity">high</field><field name="owner_id" ref="user_esg_manager_demo"/><field name="raised_date">2026-07-11</field><field name="due_date">2026-07-25</field><field name="corrective_action">Collect supplier evidence and attach it to the vendor file.</field><field name="status">in_progress</field></record>
+    <record id="issue_critical_training" model="ecosphere.compliance.issue"><field name="name">Critical compliance training overdue</field><field name="department_id" ref="dept_manufacturing"/><field name="severity">critical</field><field name="owner_id" ref="user_esg_manager_demo"/><field name="raised_date">2026-06-15</field><field name="due_date">2026-07-01</field><field name="corrective_action">Complete training and submit attendance evidence.</field><field name="status">open</field></record>
+
+    <record id="badge_first_steps" model="ecosphere.badge"><field name="name">First ESG Steps</field><field name="description">Earned after the first 50 points.</field><field name="metric">xp</field><field name="operator">&gt;=</field><field name="threshold">50</field></record>
+    <record id="badge_policy_ready" model="ecosphere.badge"><field name="name">Policy Ready</field><field name="description">Earned after policy acknowledgement.</field><field name="metric">policy_completion</field><field name="operator">&gt;=</field><field name="threshold">1</field></record>
+    <record id="reward_reusable_bottle" model="ecosphere.reward"><field name="name">Reusable Bottle</field><field name="description">EcoSphere branded stainless bottle.</field><field name="points_required">50</field><field name="available_stock">10</field></record>
+    <record id="reward_tree_certificate" model="ecosphere.reward"><field name="name">Tree Certificate</field><field name="description">Certificate for a sponsored tree planting.</field><field name="points_required">75</field><field name="available_stock">5</field></record>
+    <record id="points_employee_csr" model="ecosphere.points.transaction"><field name="employee_id" ref="emp_employee"/><field name="points">25</field><field name="reason">Demo CSR approval</field><field name="source_model">demo</field><field name="source_record_id">1</field></record>
+    <record id="points_employee_challenge" model="ecosphere.points.transaction"><field name="employee_id" ref="emp_employee"/><field name="points">40</field><field name="reason">Demo challenge approval</field><field name="source_model">demo</field><field name="source_record_id">2</field></record>
+    <record id="employee_badge_first_steps" model="ecosphere.employee.badge"><field name="employee_id" ref="emp_employee"/><field name="badge_id" ref="badge_first_steps"/><field name="source_note">Demo data</field></record>
+    <record id="reward_redemption_demo" model="ecosphere.reward.redemption"><field name="employee_id" ref="emp_employee"/><field name="reward_id" ref="reward_reusable_bottle"/><field name="state">requested</field></record>
+
+    <record id="score_operations_july" model="ecosphere.department.score"><field name="department_id" ref="dept_operations"/><field name="period">2026-07</field><field name="environmental_score">82</field><field name="social_score">74</field><field name="governance_score">68</field><field name="total_score">75.4</field><field name="calculation_details">Environmental: verified coverage and goal progress. Social: CSR and challenge participation. Governance: policy acknowledgement and issue closure.</field></record>
+    <record id="score_manufacturing_july" model="ecosphere.department.score"><field name="department_id" ref="dept_manufacturing"/><field name="period">2026-07</field><field name="environmental_score">70</field><field name="social_score">61</field><field name="governance_score">45</field><field name="total_score">59.8</field><field name="calculation_details">Critical overdue issue reduces governance score.</field></record>
+</odoo>

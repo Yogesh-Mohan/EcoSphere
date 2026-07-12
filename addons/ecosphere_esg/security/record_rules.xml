@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_employee_own_csr" model="ir.rule">
+        <field name="name">Employees see own CSR participation</field>
+        <field name="model_id" ref="model_ecosphere_csr_participation"/>
+        <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_employee_own_challenge" model="ir.rule">
+        <field name="name">Employees see own challenge participation</field>
+        <field name="model_id" ref="model_ecosphere_challenge_participation"/>
+        <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_employee_own_points" model="ir.rule">
+        <field name="name">Employees see own point ledger</field>
+        <field name="model_id" ref="model_ecosphere_points_transaction"/>
+        <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_employee_own_badges" model="ir.rule">
+        <field name="name">Employees see own badges</field>
+        <field name="model_id" ref="model_ecosphere_employee_badge"/>
+        <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_employee_own_rewards" model="ir.rule">
+        <field name="name">Employees see own redemptions</field>
+        <field name="model_id" ref="model_ecosphere_reward_redemption"/>
+        <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_employee_own_policy_ack" model="ir.rule">
+        <field name="name">Employees see own policy acknowledgements</field>
+        <field name="model_id" ref="model_ecosphere_policy_acknowledgement"/>
+        <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+        <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_department_manager_operational" model="ir.rule">
+        <field name="name">Department managers see department carbon</field>
+        <field name="model_id" ref="model_ecosphere_carbon_transaction"/>
+        <field name="groups" eval="[(4, ref('ecosphere_esg.group_department_esg_manager'))]"/>
+        <field name="domain_force">['|', ('department_id.esg_manager_id', '=', user.id), ('department_id.manager_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_department_manager_compliance" model="ir.rule">
+        <field name="name">Department managers see department compliance</field>
+        <field name="model_id" ref="model_ecosphere_compliance_issue"/>
+        <field name="groups" eval="[(4, ref('ecosphere_esg.group_department_esg_manager'))]"/>
+        <field name="domain_force">['|', ('owner_id', '=', user.id), '|', ('department_id.esg_manager_id', '=', user.id), ('department_id.manager_id.user_id', '=', user.id)]</field>
+    </record>
+
+    <record id="rule_esg_manager_all_carbon" model="ir.rule">
+        <field name="name">ESG managers see all carbon transactions</field>
+        <field name="model_id" ref="model_ecosphere_carbon_transaction"/>
+        <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="rule_esg_manager_all_compliance" model="ir.rule">
+        <field name="name">ESG managers see all compliance issues</field>
+        <field name="model_id" ref="model_ecosphere_compliance_issue"/>
+        <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_manager'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+
+    <record id="rule_auditor_governance_read" model="ir.rule">
+        <field name="name">Auditors access governance evidence</field>
+        <field name="model_id" ref="model_ecosphere_compliance_issue"/>
+        <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_auditor'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+</odoo>

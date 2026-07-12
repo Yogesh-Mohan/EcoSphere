@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_carbon_transaction" model="ir.sequence">
+        <field name="name">Carbon Transaction</field>
+        <field name="code">ecosphere.carbon.transaction</field>
+        <field name="prefix">CO2/%(year)s/</field>
+        <field name="padding">5</field>
+    </record>
+    <record id="seq_points_transaction" model="ir.sequence">
+        <field name="name">EcoSphere Points Transaction</field>
+        <field name="code">ecosphere.points.transaction</field>
+        <field name="prefix">XP/%(year)s/</field>
+        <field name="padding">5</field>
+    </record>
+    <record id="seq_reward_redemption" model="ir.sequence">
+        <field name="name">EcoSphere Reward Redemption</field>
+        <field name="code">ecosphere.reward.redemption</field>
+        <field name="prefix">RWD/%(year)s/</field>
+        <field name="padding">5</field>
+    </record>
+</odoo>

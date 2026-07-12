@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_csr_activity_calendar" model="ir.ui.view">
+        <field name="name">ecosphere.csr.activity.calendar</field>
+        <field name="model">ecosphere.csr.activity</field>
+        <field name="arch" type="xml"><calendar date_start="start_date" date_stop="end_date" color="department_id"><field name="name"/><field name="department_id"/><field name="state"/></calendar></field>
+    </record>
+    <record id="view_csr_activity_kanban" model="ir.ui.view">
+        <field name="name">ecosphere.csr.activity.kanban</field>
+        <field name="model">ecosphere.csr.activity</field>
+        <field name="arch" type="xml"><kanban default_group_by="state"><field name="name"/><field name="points"/><field name="approved_count"/><templates><t t-name="card"><div><strong><field name="name"/></strong><div><field name="points"/> points</div><div>Approved: <field name="approved_count"/></div></div></t></templates></kanban></field>
+    </record>
+    <record id="view_csr_activity_list" model="ir.ui.view">
+        <field name="name">ecosphere.csr.activity.list</field>
+        <field name="model">ecosphere.csr.activity</field>
+        <field name="arch" type="xml"><list><field name="name"/><field name="department_id"/><field name="start_date"/><field name="end_date"/><field name="maximum_participants"/><field name="points"/><field name="state"/></list></field>
+    </record>
+    <record id="view_csr_activity_form" model="ir.ui.view">
+        <field name="name">ecosphere.csr.activity.form</field>
+        <field name="model">ecosphere.csr.activity</field>
+        <field name="arch" type="xml">
+            <form><header><button name="action_open" type="object" string="Open"/><button name="action_complete" type="object" string="Complete"/><field name="state" widget="statusbar"/></header><sheet><group><group><field name="name"/><field name="category_id"/><field name="organizer_id"/><field name="department_id"/></group><group><field name="start_date"/><field name="end_date"/><field name="maximum_participants"/><field name="evidence_required"/><field name="points"/></group></group><field name="description"/></sheet><div class="oe_chatter"><field name="message_follower_ids"/><field name="activity_ids"/><field name="message_ids"/></div></form>
+        </field>
+    </record>
+
+    <record id="view_csr_participation_list" model="ir.ui.view">
+        <field name="name">ecosphere.csr.participation.list</field>
+        <field name="model">ecosphere.csr.participation</field>
+        <field name="arch" type="xml"><list><field name="activity_id"/><field name="employee_id"/><field name="department_id"/><field name="registration_date"/><field name="approval_status"/><field name="points_awarded"/></list></field>
+    </record>
+    <record id="view_csr_participation_form" model="ir.ui.view">
+        <field name="name">ecosphere.csr.participation.form</field>
+        <field name="model">ecosphere.csr.participation</field>
+        <field name="arch" type="xml"><form><header><button name="action_submit" type="object" string="Submit Proof"/><button name="action_approve" type="object" string="Approve" groups="ecosphere_esg.group_department_esg_manager"/><button name="action_reject" type="object" string="Reject" groups="ecosphere_esg.group_department_esg_manager"/><field name="approval_status" widget="statusbar"/></header><sheet><group><group><field name="activity_id"/><field name="employee_id"/><field name="department_id"/><field name="registration_date"/><field name="completion_date"/></group><group><field name="proof_attachment" filename="proof_filename"/><field name="proof_filename"/><field name="points_awarded"/><field name="points_transaction_id"/></group></group><field name="employee_notes"/><field name="reviewer_notes"/></sheet><div class="oe_chatter"><field name="message_follower_ids"/><field name="activity_ids"/><field name="message_ids"/></div></form></field>
+    </record>
+    <record id="view_csr_participation_pivot" model="ir.ui.view"><field name="name">ecosphere.csr.participation.pivot</field><field name="model">ecosphere.csr.participation</field><field name="arch" type="xml"><pivot><field name="department_id" type="row"/><field name="approval_status" type="col"/><field name="points_awarded" type="measure"/></pivot></field></record>
+    <record id="view_csr_participation_graph" model="ir.ui.view"><field name="name">ecosphere.csr.participation.graph</field><field name="model">ecosphere.csr.participation</field><field name="arch" type="xml"><graph><field name="department_id"/><field name="points_awarded" type="measure"/></graph></field></record>
+
+    <record id="view_challenge_kanban" model="ir.ui.view"><field name="name">ecosphere.challenge.kanban</field><field name="model">ecosphere.challenge</field><field name="arch" type="xml"><kanban default_group_by="status"><field name="name"/><field name="xp"/><field name="difficulty"/><templates><t t-name="card"><div><strong><field name="name"/></strong><div><field name="difficulty"/> - <field name="xp"/> XP</div></div></t></templates></kanban></field></record>
+    <record id="view_challenge_list" model="ir.ui.view"><field name="name">ecosphere.challenge.list</field><field name="model">ecosphere.challenge</field><field name="arch" type="xml"><list><field name="name"/><field name="category_id"/><field name="xp"/><field name="difficulty"/><field name="start_date"/><field name="deadline"/><field name="status"/></list></field></record>
+    <record id="view_challenge_form" model="ir.ui.view"><field name="name">ecosphere.challenge.form</field><field name="model">ecosphere.challenge</field><field name="arch" type="xml"><form><header><button name="action_activate" type="object" string="Activate"/><field name="status" widget="statusbar"/></header><sheet><group><group><field name="name"/><field name="category_id"/><field name="xp"/><field name="difficulty"/><field name="evidence_required"/></group><group><field name="start_date"/><field name="deadline"/><field name="responsible_manager_id"/><field name="applicable_department_ids" widget="many2many_tags"/></group></group><field name="description"/></sheet><div class="oe_chatter"><field name="message_follower_ids"/><field name="activity_ids"/><field name="message_ids"/></div></form></field></record>
+    <record id="view_challenge_calendar" model="ir.ui.view"><field name="name">ecosphere.challenge.calendar</field><field name="model">ecosphere.challenge</field><field name="arch" type="xml"><calendar date_start="start_date" date_stop="deadline"><field name="name"/><field name="status"/></calendar></field></record>
+
+    <record id="view_challenge_participation_list" model="ir.ui.view"><field name="name">ecosphere.challenge.participation.list</field><field name="model">ecosphere.challenge.participation</field><field name="arch" type="xml"><list><field name="challenge_id"/><field name="employee_id"/><field name="department_id"/><field name="progress_percentage"/><field name="approval_state"/><field name="xp_awarded"/></list></field></record>
+    <record id="view_challenge_participation_form" model="ir.ui.view"><field name="name">ecosphere.challenge.participation.form</field><field name="model">ecosphere.challenge.participation</field><field name="arch" type="xml"><form><header><button name="action_submit" type="object" string="Submit"/><button name="action_approve" type="object" string="Approve" groups="ecosphere_esg.group_department_esg_manager"/><button name="action_reject" type="object" string="Reject" groups="ecosphere_esg.group_department_esg_manager"/><field name="approval_state" widget="statusbar"/></header><sheet><group><group><field name="challenge_id"/><field name="employee_id"/><field name="department_id"/><field name="progress_percentage"/><field name="submission_date"/></group><group><field name="proof" filename="proof_filename"/><field name="proof_filename"/><field name="reviewer_id"/><field name="xp_awarded"/><field name="points_transaction_id"/></group></group><field name="review_comments"/></sheet><div class="oe_chatter"><field name="message_follower_ids"/><field name="activity_ids"/><field name="message_ids"/></div></form></field></record>
+    <record id="view_challenge_participation_pivot" model="ir.ui.view"><field name="name">ecosphere.challenge.participation.pivot</field><field name="model">ecosphere.challenge.participation</field><field name="arch" type="xml"><pivot><field name="department_id" type="row"/><field name="approval_state" type="col"/><field name="xp_awarded" type="measure"/></pivot></field></record>
+    <record id="view_challenge_participation_graph" model="ir.ui.view"><field name="name">ecosphere.challenge.participation.graph</field><field name="model">ecosphere.challenge.participation</field><field name="arch" type="xml"><graph><field name="department_id"/><field name="xp_awarded" type="measure"/></graph></field></record>
+</odoo>

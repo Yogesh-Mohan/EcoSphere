@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hr_department_form_ecosphere" model="ir.ui.view">
+        <field name="name">hr.department.form.ecosphere</field>
+        <field name="model">hr.department</field>
+        <field name="inherit_id" ref="hr.view_department_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="EcoSphere ESG">
+                    <group>
+                        <field name="esg_manager_id"/>
+                        <field name="parent_esg_department_id"/>
+                        <field name="esg_active"/>
+                    </group>
+                    <group>
+                        <field name="environmental_score" readonly="1"/>
+                        <field name="social_score" readonly="1"/>
+                        <field name="governance_score" readonly="1"/>
+                        <field name="total_esg_score" readonly="1"/>
+                        <field name="score_calculation_date" readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_esg_category_list" model="ir.ui.view">
+        <field name="name">ecosphere.esg.category.list</field>
+        <field name="model">ecosphere.esg.category</field>
+        <field name="arch" type="xml"><list><field name="name"/><field name="category_type"/><field name="company_id"/><field name="active"/></list></field>
+    </record>
+    <record id="view_esg_category_form" model="ir.ui.view">
+        <field name="name">ecosphere.esg.category.form</field>
+        <field name="model">ecosphere.esg.category</field>
+        <field name="arch" type="xml"><form><sheet><group><field name="name"/><field name="category_type"/><field name="company_id"/><field name="active"/></group></sheet></form></field>
+    </record>
+
+    <record id="view_emission_factor_list" model="ir.ui.view">
+        <field name="name">ecosphere.emission.factor.list</field>
+        <field name="model">ecosphere.emission.factor</field>
+        <field name="arch" type="xml"><list><field name="name"/><field name="activity_type"/><field name="scope"/><field name="factor_value"/><field name="input_unit"/><field name="output_unit"/><field name="active"/></list></field>
+    </record>
+    <record id="view_emission_factor_form" model="ir.ui.view">
+        <field name="name">ecosphere.emission.factor.form</field>
+        <field name="model">ecosphere.emission.factor</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group><field name="name"/><field name="activity_type"/><field name="source_module"/><field name="scope"/></group>
+                        <group><field name="factor_value"/><field name="input_unit"/><field name="output_unit"/><field name="company_id"/><field name="active"/></group>
+                    </group>
+                    <group><field name="valid_from"/><field name="valid_until"/><field name="reference"/></group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_product_esg_profile_list" model="ir.ui.view">
+        <field name="name">ecosphere.product.esg.profile.list</field>
+        <field name="model">ecosphere.product.esg.profile</field>
+        <field name="arch" type="xml"><list><field name="product_id"/><field name="default_emission_factor_id"/><field name="recycled_material_percentage"/><field name="supplier_sustainability_rating"/></list></field>
+    </record>
+    <record id="view_product_esg_profile_form" model="ir.ui.view">
+        <field name="name">ecosphere.product.esg.profile.form</field>
+        <field name="model">ecosphere.product.esg.profile</field>
+        <field name="arch" type="xml"><form><sheet><group><field name="product_id"/><field name="default_emission_factor_id"/><field name="recycled_material_percentage"/><field name="sustainable_certification"/><field name="supplier_sustainability_rating"/></group><field name="notes"/></sheet></form></field>
+    </record>
+</odoo>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_department_score_list" model="ir.ui.view">
+        <field name="name">ecosphere.department.score.list</field>
+        <field name="model">ecosphere.department.score</field>
+        <field name="arch" type="xml"><list><field name="period"/><field name="department_id"/><field name="environmental_score"/><field name="social_score"/><field name="governance_score"/><field name="total_score"/><field name="calculation_timestamp"/></list></field>
+    </record>
+    <record id="view_department_score_form" model="ir.ui.view">
+        <field name="name">ecosphere.department.score.form</field>
+        <field name="model">ecosphere.department.score</field>
+        <field name="arch" type="xml"><form><sheet><group><field name="department_id"/><field name="period"/><field name="environmental_score"/><field name="social_score"/><field name="governance_score"/><field name="total_score"/><field name="calculation_timestamp"/></group><field name="calculation_details"/></sheet><div class="oe_chatter"><field name="message_follower_ids"/><field name="message_ids"/></div></form></field>
+    </record>
+    <record id="view_department_score_pivot" model="ir.ui.view">
+        <field name="name">ecosphere.department.score.pivot</field>
+        <field name="model">ecosphere.department.score</field>
+        <field name="arch" type="xml"><pivot><field name="department_id" type="row"/><field name="period" type="col"/><field name="total_score" type="measure"/></pivot></field>
+    </record>
+    <record id="view_department_score_graph" model="ir.ui.view">
+        <field name="name">ecosphere.department.score.graph</field>
+        <field name="model">ecosphere.department.score</field>
+        <field name="arch" type="xml"><graph type="line"><field name="period"/><field name="total_score" type="measure"/></graph></field>
+    </record>
+</odoo>

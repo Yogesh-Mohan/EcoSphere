@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_ecosphere_employee_dashboard" model="ir.actions.act_window">
+        <field name="name">My ESG</field>
+        <field name="res_model">ecosphere.challenge.participation</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('employee_id.user_id', '=', uid)]</field>
+    </record>
+    <record id="action_ecosphere_manager_dashboard" model="ir.actions.act_window">
+        <field name="name">ESG Manager Dashboard</field>
+        <field name="res_model">ecosphere.department.score</field>
+        <field name="view_mode">graph,pivot,list,form</field>
+    </record>
+    <record id="action_ecosphere_action_centre" model="ir.actions.act_window">
+        <field name="name">Action Centre</field>
+        <field name="res_model">ecosphere.action.recommendation</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('state', '=', 'open')]</field>
+    </record>
+    <record id="action_ecosphere_categories" model="ir.actions.act_window">
+        <field name="name">ESG Categories</field>
+        <field name="res_model">ecosphere.esg.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_ecosphere_emission_factors" model="ir.actions.act_window">
+        <field name="name">Emission Factors</field>
+        <field name="res_model">ecosphere.emission.factor</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_ecosphere_product_profiles" model="ir.actions.act_window">
+        <field name="name">Product ESG Profiles</field>
+        <field name="res_model">ecosphere.product.esg.profile</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_ecosphere_departments" model="ir.actions.act_window">
+        <field name="name">ESG Departments</field>
+        <field name="res_model">hr.department</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('esg_active', '=', True)]</field>
+    </record>
+    <record id="action_ecosphere_carbon_transactions" model="ir.actions.act_window">
+        <field name="name">Carbon Transactions</field>
+        <field name="res_model">ecosphere.carbon.transaction</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+    </record>
+    <record id="action_ecosphere_environmental_goals" model="ir.actions.act_window">
+        <field name="name">Environmental Goals</field>
+        <field name="res_model">ecosphere.environmental.goal</field>
+        <field name="view_mode">kanban,list,form,graph</field>
+    </record>
+    <record id="action_ecosphere_csr_activities" model="ir.actions.act_window">
+        <field name="name">CSR Activities</field>
+        <field name="res_model">ecosphere.csr.activity</field>
+        <field name="view_mode">calendar,kanban,list,form</field>
+    </record>
+    <record id="action_ecosphere_csr_participations" model="ir.actions.act_window">
+        <field name="name">CSR Participations</field>
+        <field name="res_model">ecosphere.csr.participation</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+    </record>
+    <record id="action_ecosphere_challenges" model="ir.actions.act_window">
+        <field name="name">Challenges</field>
+        <field name="res_model">ecosphere.challenge</field>
+        <field name="view_mode">kanban,list,form,calendar</field>
+    </record>
+    <record id="action_ecosphere_challenge_participations" model="ir.actions.act_window">
+        <field name="name">Challenge Participations</field>
+        <field name="res_model">ecosphere.challenge.participation</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+    </record>
+    <record id="action_ecosphere_policies" model="ir.actions.act_window">
+        <field name="name">Policies</field>
+        <field name="res_model">ecosphere.esg.policy</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+    <record id="action_ecosphere_policy_acks" model="ir.actions.act_window">
+        <field name="name">Policy Acknowledgements</field>
+        <field name="res_model">ecosphere.policy.acknowledgement</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+    </record>
+    <record id="action_ecosphere_audits" model="ir.actions.act_window">
+        <field name="name">Audits</field>
+        <field name="res_model">ecosphere.audit</field>
+        <field name="view_mode">calendar,kanban,list,form</field>
+    </record>
+    <record id="action_ecosphere_compliance_issues" model="ir.actions.act_window">
+        <field name="name">Compliance Issues</field>
+        <field name="res_model">ecosphere.compliance.issue</field>
+        <field name="view_mode">kanban,list,form,pivot,graph</field>
+    </record>
+    <record id="action_ecosphere_badges" model="ir.actions.act_window">
+        <field name="name">Badges</field>
+        <field name="res_model">ecosphere.badge</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_ecosphere_rewards" model="ir.actions.act_window">
+        <field name="name">Rewards</field>
+        <field name="res_model">ecosphere.reward</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+    <record id="action_ecosphere_reward_redemptions" model="ir.actions.act_window">
+        <field name="name">Reward Redemptions</field>
+        <field name="res_model">ecosphere.reward.redemption</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_ecosphere_points" model="ir.actions.act_window">
+        <field name="name">Points Ledger</field>
+        <field name="res_model">ecosphere.points.transaction</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+    </record>
+    <record id="action_ecosphere_scores" model="ir.actions.act_window">
+        <field name="name">Score History</field>
+        <field name="res_model">ecosphere.department.score</field>
+        <field name="view_mode">list,form,pivot,graph</field>
+    </record>
+
+    <menuitem id="menu_ecosphere_root" name="EcoSphere" sequence="25" groups="ecosphere_esg.group_esg_employee"/>
+    <menuitem id="menu_ecosphere_dashboards" name="Dashboards" parent="menu_ecosphere_root" sequence="1"/>
+    <menuitem id="menu_ecosphere_my_esg" name="My ESG" parent="menu_ecosphere_dashboards" action="action_ecosphere_employee_dashboard" sequence="1"/>
+    <menuitem id="menu_ecosphere_manager_dashboard" name="Manager Dashboard" parent="menu_ecosphere_dashboards" action="action_ecosphere_manager_dashboard" sequence="2" groups="ecosphere_esg.group_department_esg_manager"/>
+    <menuitem id="menu_ecosphere_action_centre" name="Action Centre" parent="menu_ecosphere_dashboards" action="action_ecosphere_action_centre" sequence="3" groups="ecosphere_esg.group_esg_manager"/>
+
+    <menuitem id="menu_ecosphere_environmental" name="Environmental" parent="menu_ecosphere_root" sequence="10"/>
+    <menuitem id="menu_ecosphere_carbon_transactions" name="Carbon Transactions" parent="menu_ecosphere_environmental" action="action_ecosphere_carbon_transactions"/>
+    <menuitem id="menu_ecosphere_environmental_goals" name="Goals" parent="menu_ecosphere_environmental" action="action_ecosphere_environmental_goals"/>
+
+    <menuitem id="menu_ecosphere_social" name="Social" parent="menu_ecosphere_root" sequence="20"/>
+    <menuitem id="menu_ecosphere_csr_activities" name="CSR Activities" parent="menu_ecosphere_social" action="action_ecosphere_csr_activities"/>
+    <menuitem id="menu_ecosphere_csr_participations" name="CSR Participations" parent="menu_ecosphere_social" action="action_ecosphere_csr_participations"/>
+    <menuitem id="menu_ecosphere_challenges" name="Challenges" parent="menu_ecosphere_social" action="action_ecosphere_challenges"/>
+    <menuitem id="menu_ecosphere_challenge_participations" name="Challenge Progress" parent="menu_ecosphere_social" action="action_ecosphere_challenge_participations"/>
+
+    <menuitem id="menu_ecosphere_governance" name="Governance" parent="menu_ecosphere_root" sequence="30"/>
+    <menuitem id="menu_ecosphere_policies" name="Policies" parent="menu_ecosphere_governance" action="action_ecosphere_policies"/>
+    <menuitem id="menu_ecosphere_policy_acks" name="Acknowledgements" parent="menu_ecosphere_governance" action="action_ecosphere_policy_acks"/>
+    <menuitem id="menu_ecosphere_audits" name="Audits" parent="menu_ecosphere_governance" action="action_ecosphere_audits"/>
+    <menuitem id="menu_ecosphere_compliance_issues" name="Compliance Issues" parent="menu_ecosphere_governance" action="action_ecosphere_compliance_issues"/>
+
+    <menuitem id="menu_ecosphere_gamification" name="Gamification" parent="menu_ecosphere_root" sequence="40"/>
+    <menuitem id="menu_ecosphere_badges" name="Badges" parent="menu_ecosphere_gamification" action="action_ecosphere_badges"/>
+    <menuitem id="menu_ecosphere_rewards" name="Rewards" parent="menu_ecosphere_gamification" action="action_ecosphere_rewards"/>
+    <menuitem id="menu_ecosphere_reward_redemptions" name="Redemptions" parent="menu_ecosphere_gamification" action="action_ecosphere_reward_redemptions"/>
+    <menuitem id="menu_ecosphere_points" name="Points Ledger" parent="menu_ecosphere_gamification" action="action_ecosphere_points"/>
+
+    <menuitem id="menu_ecosphere_reporting" name="Reports" parent="menu_ecosphere_root" sequence="50"/>
+    <menuitem id="menu_ecosphere_scores" name="Score History" parent="menu_ecosphere_reporting" action="action_ecosphere_scores"/>
+
+    <menuitem id="menu_ecosphere_configuration" name="Configuration" parent="menu_ecosphere_root" sequence="90" groups="ecosphere_esg.group_esg_manager"/>
+    <menuitem id="menu_ecosphere_departments" name="Departments" parent="menu_ecosphere_configuration" action="action_ecosphere_departments"/>
+    <menuitem id="menu_ecosphere_categories" name="Categories" parent="menu_ecosphere_configuration" action="action_ecosphere_categories"/>
+    <menuitem id="menu_ecosphere_emission_factors" name="Emission Factors" parent="menu_ecosphere_configuration" action="action_ecosphere_emission_factors"/>
+    <menuitem id="menu_ecosphere_product_profiles" name="Product Profiles" parent="menu_ecosphere_configuration" action="action_ecosphere_product_profiles"/>
+</odoo>

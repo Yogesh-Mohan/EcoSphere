@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_ecosphere" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.ecosphere</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <group string="EcoSphere ESG">
+                    <group>
+                        <field name="ecosphere_auto_emission_calculation"/>
+                        <field name="ecosphere_evidence_mandatory"/>
+                        <field name="ecosphere_badge_auto_award"/>
+                        <field name="ecosphere_notification_preferences"/>
+                    </group>
+                    <group>
+                        <field name="ecosphere_environmental_weight"/>
+                        <field name="ecosphere_social_weight"/>
+                        <field name="ecosphere_governance_weight"/>
+                        <field name="ecosphere_department_aggregation_method"/>
+                        <field name="ecosphere_policy_reminder_interval"/>
+                        <field name="ecosphere_compliance_overdue_reminder_interval"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_carbon_transaction_list" model="ir.ui.view">
+        <field name="name">ecosphere.carbon.transaction.list</field>
+        <field name="model">ecosphere.carbon.transaction</field>
+        <field name="arch" type="xml">
+            <list decoration-success="verification_status == 'verified'" decoration-danger="verification_status == 'rejected'">
+                <field name="name"/><field name="date"/><field name="department_id"/><field name="employee_id"/>
+                <field name="activity_type"/><field name="activity_quantity"/><field name="emission_scope"/>
+                <field name="co2e_value"/><field name="verification_status"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_carbon_transaction_form" model="ir.ui.view">
+        <field name="name">ecosphere.carbon.transaction.form</field>
+        <field name="model">ecosphere.carbon.transaction</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_verify" type="object" string="Verify" class="btn-primary" groups="ecosphere_esg.group_esg_manager"/>
+                    <button name="action_reject" type="object" string="Reject" groups="ecosphere_esg.group_esg_manager"/>
+                    <field name="verification_status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_source_record" type="object" class="oe_stat_button" icon="fa-external-link" invisible="not source_model">
+                            <field name="source_record_display_name" widget="statinfo" string="Source"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group><field name="name"/><field name="date"/><field name="department_id"/><field name="employee_id"/><field name="company_id"/></group>
+                        <group><field name="auto_generated"/><field name="source_module"/><field name="source_model"/><field name="source_record_id"/><field name="source_record_display_name"/></group>
+                    </group>
+                    <group>
+                        <group><field name="activity_type"/><field name="activity_quantity"/><field name="activity_unit"/></group>
+                        <group><field name="emission_factor_id"/><field name="emission_factor_value"/><field name="emission_scope"/><field name="co2e_value"/></group>
+                    </group>
+                    <group><field name="calculation_method"/><field name="verification_notes"/></group>
+                    <field name="recalculation_note" readonly="1"/>
+                </sheet>
+                <div class="oe_chatter"><field name="message_follower_ids"/><field name="activity_ids"/><field name="message_ids"/></div>
+            </form>
+        </field>
+    </record>
+    <record id="view_carbon_transaction_pivot" model="ir.ui.view">
+        <field name="name">ecosphere.carbon.transaction.pivot</field>
+        <field name="model">ecosphere.carbon.transaction</field>
+        <field name="arch" type="xml"><pivot><field name="department_id" type="row"/><field name="emission_scope" type="col"/><field name="co2e_value" type="measure"/></pivot></field>
+    </record>
+    <record id="view_carbon_transaction_graph" model="ir.ui.view">
+        <field name="name">ecosphere.carbon.transaction.graph</field>
+        <field name="model">ecosphere.carbon.transaction</field>
+        <field name="arch" type="xml"><graph type="bar"><field name="date" interval="month"/><field name="co2e_value" type="measure"/></graph></field>
+    </record>
+
+    <record id="view_environmental_goal_kanban" model="ir.ui.view">
+        <field name="name">ecosphere.environmental.goal.kanban</field>
+        <field name="model">ecosphere.environmental.goal</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/><field name="department_id"/><field name="progress_percentage"/><field name="status"/>
+                <templates><t t-name="card"><div><strong><field name="name"/></strong><div><field name="department_id"/></div><field name="progress_percentage" widget="progressbar"/><div><field name="status"/></div></div></t></templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="view_environmental_goal_list" model="ir.ui.view">
+        <field name="name">ecosphere.environmental.goal.list</field>
+        <field name="model">ecosphere.environmental.goal</field>
+        <field name="arch" type="xml"><list><field name="name"/><field name="department_id"/><field name="metric"/><field name="baseline_value"/><field name="target_value"/><field name="current_value"/><field name="progress_percentage"/><field name="status"/></list></field>
+    </record>
+    <record id="view_environmental_goal_form" model="ir.ui.view">
+        <field name="name">ecosphere.environmental.goal.form</field>
+        <field name="model">ecosphere.environmental.goal</field>
+        <field name="arch" type="xml">
+            <form>
+                <header><button name="action_refresh_from_verified_carbon" type="object" string="Refresh"/><field name="status" widget="statusbar"/></header>
+                <sheet><group><group><field name="name"/><field name="department_id"/><field name="metric"/><field name="start_date"/><field name="end_date"/></group><group><field name="baseline_value"/><field name="target_value"/><field name="current_value"/><field name="progress_percentage" widget="progressbar"/></group></group></sheet>
+                <div class="oe_chatter"><field name="message_follower_ids"/><field name="activity_ids"/><field name="message_ids"/></div>
+            </form>
+        </field>
+    </record>
+    <record id="view_environmental_goal_graph" model="ir.ui.view">
+        <field name="name">ecosphere.environmental.goal.graph</field>
+        <field name="model">ecosphere.environmental.goal</field>
+        <field name="arch" type="xml"><graph type="bar"><field name="department_id"/><field name="progress_percentage" type="measure"/></graph></field>
+    </record>
+
+    <record id="view_action_recommendation_kanban" model="ir.ui.view">
+        <field name="name">ecosphere.action.recommendation.kanban</field>
+        <field name="model">ecosphere.action.recommendation</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="severity">
+                <field name="name"/><field name="department_id"/><field name="severity"/><field name="state"/>
+                <templates><t t-name="card"><div><strong><field name="name"/></strong><div><field name="department_id"/></div><div><field name="recommended_action"/></div></div></t></templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="view_action_recommendation_list" model="ir.ui.view">
+        <field name="name">ecosphere.action.recommendation.list</field>
+        <field name="model">ecosphere.action.recommendation</field>
+        <field name="arch" type="xml"><list><field name="name"/><field name="department_id"/><field name="severity"/><field name="state"/></list></field>
+    </record>
+    <record id="view_action_recommendation_form" model="ir.ui.view">
+        <field name="name">ecosphere.action.recommendation.form</field>
+        <field name="model">ecosphere.action.recommendation</field>
+        <field name="arch" type="xml"><form><header><button name="action_done" type="object" string="Done"/><button name="action_dismiss" type="object" string="Dismiss"/><field name="state" widget="statusbar"/></header><sheet><group><field name="name"/><field name="department_id"/><field name="severity"/></group><field name="reason"/><field name="recommended_action"/><group><field name="source_model"/><field name="source_record_id"/></group></sheet></form></field>
+    </record>
+</odoo>

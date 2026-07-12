@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="cron_policy_ack_reminders" model="ir.cron">
+        <field name="name">EcoSphere Policy Acknowledgement Reminders</field>
+        <field name="model_id" ref="model_ecosphere_policy_acknowledgement"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_policy_reminders()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+    <record id="cron_policy_expiry_reminders" model="ir.cron">
+        <field name="name">EcoSphere Expiring Policy Reminders</field>
+        <field name="model_id" ref="model_ecosphere_policy_acknowledgement"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_expiring_policy_reminders()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+    <record id="cron_compliance_overdue" model="ir.cron">
+        <field name="name">EcoSphere Compliance Overdue Checks</field>
+        <field name="model_id" ref="model_ecosphere_compliance_issue"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_overdue_issue_checks()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+    <record id="cron_esg_score_calculation" model="ir.cron">
+        <field name="name">EcoSphere ESG Score Calculation</field>
+        <field name="model_id" ref="model_ecosphere_department_score"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_calculate_scores()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

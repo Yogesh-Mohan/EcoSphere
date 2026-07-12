@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_esg_employee" model="res.groups">
+        <field name="name">ESG Employee</field>
+    </record>
+
+    <record id="group_department_esg_manager" model="res.groups">
+        <field name="name">Department ESG Manager</field>
+        <field name="implied_ids" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+    </record>
+
+    <record id="group_esg_manager" model="res.groups">
+        <field name="name">ESG Manager</field>
+        <field name="implied_ids" eval="[(4, ref('ecosphere_esg.group_department_esg_manager'))]"/>
+    </record>
+
+    <record id="group_esg_auditor" model="res.groups">
+        <field name="name">ESG Auditor</field>
+        <field name="implied_ids" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+    </record>
+
+    <record id="group_esg_administrator" model="res.groups">
+        <field name="name">ESG Administrator</field>
+        <field name="implied_ids" eval="[(4, ref('ecosphere_esg.group_esg_manager')), (4, ref('ecosphere_esg.group_esg_auditor'))]"/>
+        <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
+    </record>
+</odoo>
