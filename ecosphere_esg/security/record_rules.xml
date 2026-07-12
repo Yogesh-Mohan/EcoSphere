@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="rule_esg_category_company" model="ir.rule">
+            <field name="name">ESG Category: allowed companies</field>
+            <field name="model_id" ref="model_esg_category"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_esg_emission_factor_company" model="ir.rule">
+            <field name="name">Emission Factor: allowed companies</field>
+            <field name="model_id" ref="model_esg_emission_factor"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_esg_environmental_goal_company" model="ir.rule">
+            <field name="name">Environmental Goal: allowed companies</field>
+            <field name="model_id" ref="model_esg_environmental_goal"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_esg_environmental_goal_employee" model="ir.rule">
+            <field name="name">Environmental Goal: employee department</field>
+            <field name="model_id" ref="model_esg_environmental_goal"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+            <field name="domain_force">['|', ('department_id', '=', False), ('department_id', '=', user.employee_id.department_id.id)]</field>
+        </record>
+
+        <record id="rule_esg_environmental_goal_department_manager" model="ir.rule">
+            <field name="name">Environmental Goal: managed departments</field>
+            <field name="model_id" ref="model_esg_environmental_goal"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_department_manager'))]"/>
+            <field name="domain_force">['|', ('department_id', '=', False), ('department_id.esg_manager_id.user_id', '=', user.id)]</field>
+        </record>
+
+        <record id="rule_esg_environmental_goal_officer_admin" model="ir.rule">
+            <field name="name">Environmental Goal: ESG officers and administrators</field>
+            <field name="model_id" ref="model_esg_environmental_goal"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_officer')), (4, ref('ecosphere_esg.group_esg_administrator'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_esg_carbon_transaction_company" model="ir.rule">
+            <field name="name">Carbon Transaction: allowed companies</field>
+            <field name="model_id" ref="model_esg_carbon_transaction"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_esg_carbon_transaction_department_manager" model="ir.rule">
+            <field name="name">Carbon Transaction: managed departments</field>
+            <field name="model_id" ref="model_esg_carbon_transaction"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_department_manager'))]"/>
+            <field name="domain_force">['|', ('department_id', '=', False), ('department_id.esg_manager_id.user_id', '=', user.id)]</field>
+        </record>
+
+        <record id="rule_esg_carbon_transaction_officer_admin" model="ir.rule">
+            <field name="name">Carbon Transaction: ESG officers and administrators</field>
+            <field name="model_id" ref="model_esg_carbon_transaction"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_officer')), (4, ref('ecosphere_esg.group_esg_administrator'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_esg_csr_activity_company" model="ir.rule">
+            <field name="name">CSR Activity: allowed companies</field>
+            <field name="model_id" ref="model_esg_csr_activity"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_esg_csr_activity_employee" model="ir.rule">
+            <field name="name">CSR Activity: published and department eligible</field>
+            <field name="model_id" ref="model_esg_csr_activity"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+            <field name="domain_force">[('status', 'in', ('published', 'ongoing', 'completed')), '|', ('department_ids', '=', False), ('department_ids', 'in', [user.employee_id.department_id.id])]</field>
+        </record>
+
+        <record id="rule_esg_csr_activity_department_manager" model="ir.rule">
+            <field name="name">CSR Activity: managed departments</field>
+            <field name="model_id" ref="model_esg_csr_activity"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_department_manager'))]"/>
+            <field name="domain_force">['|', ('department_ids', '=', False), ('department_ids.esg_manager_id.user_id', '=', user.id)]</field>
+        </record>
+
+        <record id="rule_esg_csr_activity_officer_admin" model="ir.rule">
+            <field name="name">CSR Activity: ESG officers and administrators</field>
+            <field name="model_id" ref="model_esg_csr_activity"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_officer')), (4, ref('ecosphere_esg.group_esg_administrator'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_esg_csr_participation_company" model="ir.rule">
+            <field name="name">CSR Participation: allowed companies</field>
+            <field name="model_id" ref="model_esg_csr_participation"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_esg_csr_participation_employee" model="ir.rule">
+            <field name="name">CSR Participation: own records</field>
+            <field name="model_id" ref="model_esg_csr_participation"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+            <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        </record>
+
+        <record id="rule_esg_csr_participation_department_manager" model="ir.rule">
+            <field name="name">CSR Participation: managed departments</field>
+            <field name="model_id" ref="model_esg_csr_participation"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_department_manager'))]"/>
+            <field name="domain_force">[('department_id.esg_manager_id.user_id', '=', user.id)]</field>
+        </record>
+
+        <record id="rule_esg_csr_participation_officer_admin" model="ir.rule">
+            <field name="name">CSR Participation: ESG officers and administrators</field>
+            <field name="model_id" ref="model_esg_csr_participation"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_officer')), (4, ref('ecosphere_esg.group_esg_administrator'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+
+        <record id="rule_esg_xp_ledger_company" model="ir.rule">
+            <field name="name">XP Ledger: allowed companies</field>
+            <field name="model_id" ref="model_esg_xp_ledger"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_esg_xp_ledger_employee" model="ir.rule">
+            <field name="name">XP Ledger: own entries</field>
+            <field name="model_id" ref="model_esg_xp_ledger"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+            <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+        </record>
+
+        <record id="rule_esg_xp_ledger_department_manager" model="ir.rule">
+            <field name="name">XP Ledger: managed departments</field>
+            <field name="model_id" ref="model_esg_xp_ledger"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_department_manager'))]"/>
+            <field name="domain_force">[('employee_id.department_id.esg_manager_id.user_id', '=', user.id)]</field>
+        </record>
+
+        <record id="rule_esg_xp_ledger_officer_admin" model="ir.rule">
+            <field name="name">XP Ledger: ESG officers and administrators</field>
+            <field name="model_id" ref="model_esg_xp_ledger"/>
+            <field name="groups" eval="[(4, ref('ecosphere_esg.group_esg_officer')), (4, ref('ecosphere_esg.group_esg_administrator'))]"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+        </record>
+    </data>
+</odoo>

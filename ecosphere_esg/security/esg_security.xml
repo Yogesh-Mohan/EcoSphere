@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="module_category_ecosphere_esg" model="ir.module.category">
+            <field name="name">EcoSphere ESG</field>
+            <field name="description">EcoSphere ESG platform access groups</field>
+            <field name="sequence">45</field>
+        </record>
+
+        <record id="group_esg_employee" model="res.groups">
+            <field name="name">ESG Employee</field>
+            <field name="category_id" ref="module_category_ecosphere_esg"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_esg_department_manager" model="res.groups">
+            <field name="name">Department ESG Manager</field>
+            <field name="category_id" ref="module_category_ecosphere_esg"/>
+            <field name="implied_ids" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+        </record>
+
+        <record id="group_esg_officer" model="res.groups">
+            <field name="name">ESG Officer</field>
+            <field name="category_id" ref="module_category_ecosphere_esg"/>
+            <field name="implied_ids" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+        </record>
+
+        <record id="group_esg_governance_auditor" model="res.groups">
+            <field name="name">Governance Auditor</field>
+            <field name="category_id" ref="module_category_ecosphere_esg"/>
+            <field name="implied_ids" eval="[(4, ref('ecosphere_esg.group_esg_employee'))]"/>
+        </record>
+
+        <record id="group_esg_administrator" model="res.groups">
+            <field name="name">ESG Administrator</field>
+            <field name="category_id" ref="module_category_ecosphere_esg"/>
+            <field name="implied_ids" eval="[
+                (4, ref('ecosphere_esg.group_esg_department_manager')),
+                (4, ref('ecosphere_esg.group_esg_officer')),
+                (4, ref('ecosphere_esg.group_esg_governance_auditor')),
+                (4, ref('base.group_system'))
+            ]"/>
+        </record>
+    </data>
+</odoo>
