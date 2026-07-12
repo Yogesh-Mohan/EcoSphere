@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_ecosphere_root"
+              name="EcoSphere"
+              sequence="45"
+              groups="ecosphere_esg.group_esg_employee,ecosphere_esg.group_esg_department_manager,ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_governance_auditor,ecosphere_esg.group_esg_administrator"/>
+
+    <menuitem id="menu_ecosphere_dashboard"
+              name="Dashboard"
+              parent="menu_ecosphere_root"
+              sequence="10"
+              groups="ecosphere_esg.group_esg_employee,ecosphere_esg.group_esg_department_manager,ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_governance_auditor,ecosphere_esg.group_esg_administrator"/>
+
+    <menuitem id="menu_ecosphere_environmental"
+              name="Environmental"
+              parent="menu_ecosphere_root"
+              sequence="20"
+              groups="ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_administrator"/>
+
+    <menuitem id="menu_ecosphere_social"
+              name="Social"
+              parent="menu_ecosphere_root"
+              sequence="30"
+              groups="ecosphere_esg.group_esg_employee,ecosphere_esg.group_esg_department_manager,ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_administrator"/>
+
+    <menuitem id="menu_ecosphere_governance"
+              name="Governance"
+              parent="menu_ecosphere_root"
+              sequence="40"
+              groups="ecosphere_esg.group_esg_governance_auditor,ecosphere_esg.group_esg_administrator"/>
+
+    <menuitem id="menu_ecosphere_gamification"
+              name="Engagement"
+              parent="menu_ecosphere_root"
+              sequence="50"
+              groups="ecosphere_esg.group_esg_employee,ecosphere_esg.group_esg_department_manager,ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_administrator"/>
+
+    <menuitem id="menu_ecosphere_reports"
+              name="Reports"
+              parent="menu_ecosphere_root"
+              sequence="60"
+              groups="ecosphere_esg.group_esg_department_manager,ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_governance_auditor,ecosphere_esg.group_esg_administrator"/>
+
+    <menuitem id="menu_ecosphere_configuration"
+              name="Configuration"
+              parent="menu_ecosphere_root"
+              sequence="90"
+              groups="ecosphere_esg.group_esg_department_manager,ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_governance_auditor,ecosphere_esg.group_esg_administrator"/>
+</odoo>

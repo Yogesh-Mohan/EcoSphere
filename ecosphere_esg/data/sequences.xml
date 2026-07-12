@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_esg_carbon_transaction" model="ir.sequence">
+        <field name="name">ESG Carbon Transaction</field>
+        <field name="code">esg.carbon.transaction</field>
+        <field name="prefix">CO2/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <record id="seq_esg_csr_activity" model="ir.sequence">
+        <field name="name">ESG CSR Activity</field>
+        <field name="code">esg.csr.activity</field>
+        <field name="prefix">CSR/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>
