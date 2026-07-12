@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_esg_csr_activity_tree" model="ir.ui.view">
+        <field name="name">esg.csr.activity.tree</field>
+        <field name="model">esg.csr.activity</field>
+        <field name="arch" type="xml">
+            <tree string="CSR Activities" default_order="start_datetime desc" decoration-success="status == 'completed'" decoration-muted="status == 'cancelled'">
+                <field name="reference"/>
+                <field name="title"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                <field name="category_id" optional="show"/>
+                <field name="organizer_id" optional="show"/>
+                <field name="location" optional="show"/>
+                <field name="start_datetime"/>
+                <field name="end_datetime"/>
+                <field name="capacity" optional="show"/>
+                <field name="participant_count"/>
+                <field name="approved_participant_count"/>
+                <field name="total_volunteering_hours" sum="Volunteer Hours"/>
+                <field name="points"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_esg_csr_activity_kanban" model="ir.ui.view">
+        <field name="name">esg.csr.activity.kanban</field>
+        <field name="model">esg.csr.activity</field>
+        <field name="arch" type="xml">
+            <kanban string="CSR Activities" default_group_by="status" class="o_kanban_small_column" sample="0">
+                <field name="title"/>
+                <field name="reference"/>
+                <field name="status"/>
+                <field name="start_datetime"/>
+                <field name="end_datetime"/>
+                <field name="location"/>
+                <field name="points"/>
+                <field name="participant_count"/>
+                <field name="capacity"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record">
+                            <div class="o_kanban_record_top">
+                                <strong class="o_kanban_record_title"><field name="title"/></strong>
+                                <field name="status" widget="label_selection"/>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div><span class="text-muted">Reference:</span> <field name="reference"/></div>
+                                <div><span class="text-muted">Start:</span> <field name="start_datetime"/></div>
+                                <div t-if="record.location.raw_value"><span class="text-muted">Location:</span> <field name="location"/></div>
+                                <div><span class="text-muted">Participants:</span> <field name="participant_count"/> / <field name="capacity"/></div>
+                                <div><span class="text-muted">Points:</span> <field name="points"/></div>
+                            </div>
+                            <div class="o_kanban_record_bottom" t-if="record.status.raw_value == 'published' or record.status.raw_value == 'ongoing'">
+                                <button type="object" name="action_join" class="btn btn-sm btn-primary" groups="ecosphere_esg.group_esg_employee">Join</button>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_esg_csr_activity_form" model="ir.ui.view">
+        <field name="name">esg.csr.activity.form</field>
+        <field name="model">esg.csr.activity</field>
+        <field name="arch" type="xml">
+            <form string="CSR Activity">
+                <header>
+                    <button name="action_publish" type="object" string="Publish" class="btn-primary" invisible="status != 'draft'" groups="ecosphere_esg.group_esg_department_manager,ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_administrator"/>
+                    <button name="action_start" type="object" string="Start" class="btn-primary" invisible="status != 'published'" groups="ecosphere_esg.group_esg_department_manager,ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_administrator"/>
+                    <button name="action_complete" type="object" string="Complete" class="btn-primary" invisible="status != 'ongoing'" groups="ecosphere_esg.group_esg_department_manager,ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_administrator"/>
+                    <button name="action_join" type="object" string="Join" class="btn-secondary" invisible="status not in ('published', 'ongoing')" groups="ecosphere_esg.group_esg_employee"/>
+                    <button name="action_cancel" type="object" string="Cancel" invisible="status in ('completed', 'cancelled')" groups="ecosphere_esg.group_esg_department_manager,ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_administrator"/>
+                    <field name="status" widget="statusbar" statusbar_visible="draft,published,ongoing,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_participations" type="object" class="oe_stat_button" icon="fa-users">
+                            <field name="participant_count" widget="statinfo" string="Participants"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Cancelled" bg_color="text-bg-secondary" invisible="status != 'cancelled'"/>
+                    <div class="oe_title">
+                        <label for="title"/>
+                        <h1><field name="title" placeholder="CSR activity title"/></h1>
+                    </div>
+                    <group>
+                        <group string="Activity Details">
+                            <field name="reference" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="category_id"/>
+                            <field name="organizer_id"/>
+                            <field name="department_ids" widget="many2many_tags"/>
+                        </group>
+                        <group string="Schedule and Capacity">
+                            <field name="location"/>
+                            <field name="start_datetime"/>
+                            <field name="end_datetime"/>
+                            <field name="capacity"/>
+                            <field name="points"/>
+                        </group>
+                    </group>
+                    <group string="Participation Metrics">
+                        <field name="participant_count" readonly="1"/>
+                        <field name="approved_participant_count" readonly="1"/>
+                        <field name="total_volunteering_hours" readonly="1"/>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="Describe the purpose, eligibility, logistics, and expected outcome."/>
+                        </page>
+                        <page string="Participants" name="participants">
+                            <field name="participation_ids" readonly="1">
+                                <tree string="Participants">
+                                    <field name="employee_id"/>
+                                    <field name="department_id"/>
+                                    <field name="participation_hours"/>
+                                    <field name="state"/>
+                                    <field name="points_earned"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_esg_csr_activity_search" model="ir.ui.view">
+        <field name="name">esg.csr.activity.search</field>
+        <field name="model">esg.csr.activity</field>
+        <field name="arch" type="xml">
+            <search string="Search CSR Activities">
+                <field name="title"/>
+                <field name="reference"/>
+                <field name="category_id"/>
+                <field name="organizer_id"/>
+                <field name="department_ids"/>
+                <field name="status"/>
+                <filter string="Published" name="published" domain="[('status', '=', 'published')]"/>
+                <filter string="Ongoing" name="ongoing" domain="[('status', '=', 'ongoing')]"/>
+                <filter string="Completed" name="completed" domain="[('status', '=', 'completed')]"/>
+                <filter string="Upcoming" name="upcoming" domain="[('start_datetime', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    <filter string="Category" name="group_category" context="{'group_by': 'category_id'}"/>
+                    <filter string="Organizer" name="group_organizer" context="{'group_by': 'organizer_id'}"/>
+                    <filter string="Start Month" name="group_start_month" context="{'group_by': 'start_datetime:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_esg_csr_activity_calendar" model="ir.ui.view">
+        <field name="name">esg.csr.activity.calendar</field>
+        <field name="model">esg.csr.activity</field>
+        <field name="arch" type="xml">
+            <calendar string="CSR Calendar" date_start="start_datetime" date_stop="end_datetime" color="status" event_open_popup="true">
+                <field name="title"/>
+                <field name="location"/>
+                <field name="status"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="action_esg_csr_activity" model="ir.actions.act_window">
+        <field name="name">CSR Activities</field>
+        <field name="res_model">esg.csr.activity</field>
+        <field name="view_mode">kanban,tree,form,calendar</field>
+        <field name="search_view_id" ref="view_esg_csr_activity_search"/>
+        <field name="context">{'search_default_published': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create a CSR activity</p>
+            <p>CSR activities coordinate volunteering, community involvement, employee participation, and ESG engagement points.</p>
+        </field>
+    </record>
+
+    <record id="view_esg_csr_participation_tree" model="ir.ui.view">
+        <field name="name">esg.csr.participation.tree</field>
+        <field name="model">esg.csr.participation</field>
+        <field name="arch" type="xml">
+            <tree string="CSR Participation" default_order="completion_date desc,id desc" decoration-success="state == 'approved'" decoration-danger="state == 'rejected'">
+                <field name="activity_id"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="completion_date"/>
+                <field name="participation_hours" sum="Volunteer Hours"/>
+                <field name="points_earned" sum="Points"/>
+                <field name="reviewer_id" optional="show"/>
+                <field name="review_date" optional="hide"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_esg_csr_participation_form" model="ir.ui.view">
+        <field name="name">esg.csr.participation.form</field>
+        <field name="model">esg.csr.participation</field>
+        <field name="arch" type="xml">
+            <form string="CSR Participation">
+                <header>
+                    <button name="action_submit" type="object" string="Submit Evidence" class="btn-primary" invisible="state not in ('registered', 'rejected')"/>
+                    <button name="action_approve" type="object" string="Approve" class="btn-primary" invisible="state != 'submitted'" groups="ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_administrator"/>
+                    <button name="action_reject" type="object" string="Reject" invisible="state != 'submitted'" groups="ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_administrator"/>
+                    <button name="action_reverse_approval" type="object" string="Reverse Approval" invisible="state != 'approved'" groups="ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_administrator"/>
+                    <field name="state" widget="statusbar" statusbar_visible="registered,submitted,approved"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Rejected" bg_color="text-bg-danger" invisible="state != 'rejected'"/>
+                    <div class="oe_title">
+                        <label for="activity_id"/>
+                        <h1><field name="activity_id"/></h1>
+                    </div>
+                    <group>
+                        <group string="Employee Summary">
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="employee_id"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group string="Submission">
+                            <field name="completion_date"/>
+                            <field name="participation_hours"/>
+                            <field name="points_earned" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Evidence" name="evidence">
+                            <group>
+                                <field name="proof_attachment_ids" widget="many2many_binary"/>
+                                <field name="proof_description" placeholder="Describe the proof, work completed, and volunteering outcome."/>
+                            </group>
+                        </page>
+                        <page string="Review" name="review">
+                            <group>
+                                <field name="reviewer_id" readonly="1"/>
+                                <field name="review_date" readonly="1"/>
+                                <field name="rejection_reason" placeholder="Required before rejecting a submission."/>
+                                <field name="xp_ledger_id" readonly="1"/>
+                                <field name="reversal_ledger_id" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_esg_csr_participation_search" model="ir.ui.view">
+        <field name="name">esg.csr.participation.search</field>
+        <field name="model">esg.csr.participation</field>
+        <field name="arch" type="xml">
+            <search string="Search CSR Participation">
+                <field name="activity_id"/>
+                <field name="employee_id"/>
+                <field name="department_id"/>
+                <field name="state"/>
+                <filter string="My Participation" name="my_participation" domain="[('employee_id.user_id', '=', uid)]"/>
+                <filter string="Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Activity" name="group_activity" context="{'group_by': 'activity_id'}"/>
+                    <filter string="Department" name="group_department" context="{'group_by': 'department_id'}"/>
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Completion Month" name="group_completion_month" context="{'group_by': 'completion_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_esg_csr_participation_graph" model="ir.ui.view">
+        <field name="name">esg.csr.participation.graph</field>
+        <field name="model">esg.csr.participation</field>
+        <field name="arch" type="xml">
+            <graph string="CSR Participation" type="bar" sample="0">
+                <field name="completion_date" interval="month"/>
+                <field name="participation_hours" type="measure"/>
+                <field name="department_id"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_esg_csr_participation_pivot" model="ir.ui.view">
+        <field name="name">esg.csr.participation.pivot</field>
+        <field name="model">esg.csr.participation</field>
+        <field name="arch" type="xml">
+            <pivot string="CSR Metrics" sample="0">
+                <field name="department_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="participation_hours" type="measure"/>
+                <field name="points_earned" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="action_esg_csr_participation" model="ir.actions.act_window">
+        <field name="name">CSR Participation</field>
+        <field name="res_model">esg.csr.participation</field>
+        <field name="view_mode">tree,form,graph,pivot</field>
+        <field name="search_view_id" ref="view_esg_csr_participation_search"/>
+        <field name="context">{'search_default_submitted': 1}</field>
+    </record>
+
+    <record id="action_esg_social_metrics" model="ir.actions.act_window">
+        <field name="name">Social Metrics</field>
+        <field name="res_model">esg.csr.participation</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="search_view_id" ref="view_esg_csr_participation_search"/>
+        <field name="context">{'search_default_approved': 1, 'search_default_group_department': 1}</field>
+    </record>
+
+    <record id="view_esg_xp_ledger_tree" model="ir.ui.view">
+        <field name="name">esg.xp.ledger.tree</field>
+        <field name="model">esg.xp.ledger</field>
+        <field name="arch" type="xml">
+            <tree string="XP Ledger" default_order="date desc,id desc" create="false" edit="false" delete="false" decoration-danger="xp_amount &lt; 0 or points_amount &lt; 0">
+                <field name="date"/>
+                <field name="employee_id"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+                <field name="transaction_type"/>
+                <field name="xp_amount" sum="XP"/>
+                <field name="points_amount" sum="Points"/>
+                <field name="description"/>
+                <field name="reversal_of_id" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_esg_xp_ledger_form" model="ir.ui.view">
+        <field name="name">esg.xp.ledger.form</field>
+        <field name="model">esg.xp.ledger</field>
+        <field name="arch" type="xml">
+            <form string="XP Ledger Entry" create="false" edit="false" delete="false">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="description"/>
+                        <h1><field name="description" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                            <field name="date" readonly="1"/>
+                            <field name="transaction_type" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="xp_amount" readonly="1"/>
+                            <field name="points_amount" readonly="1"/>
+                            <field name="reversal_of_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Source">
+                        <field name="source_model" readonly="1"/>
+                        <field name="source_res_id" readonly="1"/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_esg_xp_ledger_search" model="ir.ui.view">
+        <field name="name">esg.xp.ledger.search</field>
+        <field name="model">esg.xp.ledger</field>
+        <field name="arch" type="xml">
+            <search string="Search XP Ledger">
+                <field name="employee_id"/>
+                <field name="transaction_type"/>
+                <field name="description"/>
+                <filter string="My Ledger" name="my_ledger" domain="[('employee_id.user_id', '=', uid)]"/>
+                <filter string="Reversals" name="reversals" domain="[('transaction_type', '=', 'reversal')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="group_employee" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Transaction Type" name="group_transaction_type" context="{'group_by': 'transaction_type'}"/>
+                    <filter string="Month" name="group_month" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_esg_xp_ledger" model="ir.actions.act_window">
+        <field name="name">XP Ledger</field>
+        <field name="res_model">esg.xp.ledger</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_esg_xp_ledger_search"/>
+        <field name="context">{'search_default_my_ledger': 1}</field>
+    </record>
+
+    <menuitem id="menu_esg_csr_activities"
+              name="CSR Activities"
+              parent="ecosphere_esg.menu_ecosphere_social"
+              action="action_esg_csr_activity"
+              sequence="10"/>
+
+    <menuitem id="menu_esg_csr_participation"
+              name="CSR Participation"
+              parent="ecosphere_esg.menu_ecosphere_social"
+              action="action_esg_csr_participation"
+              sequence="20"/>
+
+    <menuitem id="menu_esg_social_metrics"
+              name="Social Metrics"
+              parent="ecosphere_esg.menu_ecosphere_social"
+              action="action_esg_social_metrics"
+              sequence="30"
+              groups="ecosphere_esg.group_esg_department_manager,ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_administrator"/>
+
+    <menuitem id="menu_esg_xp_ledger"
+              name="XP Ledger"
+              parent="ecosphere_esg.menu_ecosphere_gamification"
+              action="action_esg_xp_ledger"
+              sequence="10"/>
+</odoo>

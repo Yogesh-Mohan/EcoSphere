@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_ecosphere_esg" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.ecosphere.esg</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="EcoSphere ESG" string="EcoSphere ESG" name="ecosphere_esg" groups="ecosphere_esg.group_esg_administrator">
+                    <block title="Automation" name="ecosphere_esg_automation">
+                        <setting id="esg_automatic_emission_calculation" string="Automatic emissions" help="Create and reconcile carbon transactions from supported Odoo source records.">
+                            <field name="esg_automatic_emission_calculation"/>
+                        </setting>
+                        <setting id="esg_automatic_badge_awarding" string="Automatic badge awards" help="Award badges from structured rules during scheduled reconciliation.">
+                            <field name="esg_automatic_badge_awarding"/>
+                        </setting>
+                        <setting id="esg_score_refresh_frequency" string="Score refresh frequency" help="Default cadence used by scheduled ESG score snapshots.">
+                            <field name="esg_score_refresh_frequency"/>
+                        </setting>
+                    </block>
+
+                    <block title="Evidence Controls" name="ecosphere_esg_evidence">
+                        <setting id="esg_csr_evidence_required" string="CSR evidence required" help="Prevent CSR approval unless proof is attached.">
+                            <field name="esg_csr_evidence_required"/>
+                        </setting>
+                        <setting id="esg_challenge_evidence_required" string="Challenge evidence required" help="Prevent challenge approval unless proof is attached when required globally or by challenge.">
+                            <field name="esg_challenge_evidence_required"/>
+                        </setting>
+                    </block>
+
+                    <block title="Notifications" name="ecosphere_esg_notifications">
+                        <setting id="esg_notify_in_app" string="In-app notifications" help="Use Odoo in-app notifications and activities where supported.">
+                            <field name="esg_notify_in_app"/>
+                        </setting>
+                        <setting id="esg_notify_email" string="Email notifications" help="Send ESG workflow emails from configured templates.">
+                            <field name="esg_notify_email"/>
+                        </setting>
+                        <setting id="esg_policy_reminder_days" string="Policy reminder days" help="Days before acknowledgement deadline to remind employees.">
+                            <field name="esg_policy_reminder_days"/>
+                        </setting>
+                        <setting id="esg_compliance_warning_days" string="Compliance warning days" help="Days before due date to warn compliance issue owners.">
+                            <field name="esg_compliance_warning_days"/>
+                        </setting>
+                    </block>
+
+                    <block title="Scoring" name="ecosphere_esg_scoring">
+                        <setting id="esg_environmental_weight" string="Environmental weight" help="Weighted contribution of environmental score. ESG weights must total 100.">
+                            <field name="esg_environmental_weight"/>
+                        </setting>
+                        <setting id="esg_social_weight" string="Social weight" help="Weighted contribution of social score. ESG weights must total 100.">
+                            <field name="esg_social_weight"/>
+                        </setting>
+                        <setting id="esg_governance_weight" string="Governance weight" help="Weighted contribution of governance score. ESG weights must total 100.">
+                            <field name="esg_governance_weight"/>
+                        </setting>
+                    </block>
+
+                    <block title="Reporting" name="ecosphere_esg_reporting">
+                        <setting id="esg_default_emission_unit" string="Default emission unit" help="Preferred emission unit for dashboards and reports.">
+                            <field name="esg_default_emission_unit"/>
+                        </setting>
+                        <setting id="esg_reporting_year" string="Reporting year" help="Default fiscal or ESG reporting year.">
+                            <field name="esg_reporting_year"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_ecosphere_esg_settings" model="ir.actions.act_window">
+        <field name="name">ESG Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'ecosphere_esg'}</field>
+    </record>
+
+    <record id="view_esg_category_tree" model="ir.ui.view">
+        <field name="name">esg.category.tree</field>
+        <field name="model">esg.category</field>
+        <field name="arch" type="xml">
+            <tree string="ESG Categories" default_order="category_type,name" decoration-muted="not active">
+                <field name="name"/>
+                <field name="category_type"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle" optional="hide"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_esg_category_form" model="ir.ui.view">
+        <field name="name">esg.category.form</field>
+        <field name="model">esg.category</field>
+        <field name="arch" type="xml">
+            <form string="ESG Category">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-secondary" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Category name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category_type"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description" name="description">
+                            <field name="description" placeholder="Explain how this category is used in ESG workflows."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_esg_category_search" model="ir.ui.view">
+        <field name="name">esg.category.search</field>
+        <field name="model">esg.category</field>
+        <field name="arch" type="xml">
+            <search string="Search ESG Categories">
+                <field name="name"/>
+                <field name="category_type"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter string="CSR Activity" name="type_csr_activity" domain="[('category_type', '=', 'csr_activity')]"/>
+                <filter string="Challenge" name="type_challenge" domain="[('category_type', '=', 'challenge')]"/>
+                <filter string="Emission" name="type_emission" domain="[('category_type', '=', 'emission')]"/>
+                <filter string="Policy" name="type_policy" domain="[('category_type', '=', 'policy')]"/>
+                <filter string="Training" name="type_training" domain="[('category_type', '=', 'training')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Type" name="group_category_type" context="{'group_by': 'category_type'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}" groups="base.group_multi_company"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_esg_category" model="ir.actions.act_window">
+        <field name="name">ESG Categories</field>
+        <field name="res_model">esg.category</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_esg_category_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first ESG category</p>
+            <p>Categories keep emissions, policies, activities, training, and challenges consistently classified across reports and dashboards.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_ecosphere_categories"
+              name="Categories"
+              parent="ecosphere_esg.menu_ecosphere_configuration"
+              action="action_esg_category"
+              sequence="20"
+              groups="ecosphere_esg.group_esg_administrator,ecosphere_esg.group_esg_officer,ecosphere_esg.group_esg_governance_auditor"/>
+
+    <menuitem id="menu_ecosphere_settings"
+              name="ESG Settings"
+              parent="ecosphere_esg.menu_ecosphere_configuration"
+              action="action_ecosphere_esg_settings"
+              sequence="90"
+              groups="ecosphere_esg.group_esg_administrator"/>
+</odoo>

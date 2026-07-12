@@ -1,251 +1,95 @@
 # EcoSphere ESG Management Platform
 
-EcoSphere is a local-first Odoo Community addon named `ecosphere_esg`. It connects operational Odoo data to ESG transactions, verification, scoring, dashboards, corrective actions, reports, and an audit trail.
+EcoSphere is a local-first Odoo Community ESG platform. The working local demo addon is under:
 
-The standard local URL is:
+```text
+addons/ecosphere_esg
+```
+
+The platform is designed to run locally with Odoo and PostgreSQL at:
 
 ```text
 http://localhost:8069
 ```
 
+## Current Local Validation
+
+- Odoo 19 Docker service runs at `localhost:8069`.
+- PostgreSQL runs through Docker Compose.
+- Database `ecosphere_demo` was created.
+- Module `ecosphere_esg` was installed successfully.
+- EcoSphere appears in the Odoo app launcher.
+- `EcoSphere > Environmental > Carbon Transactions` loads with 3 demo records.
+
+Demo admin login:
+
+```text
+admin@example.local
+admin
+```
+
 ## What Is Included
 
-- Odoo-native Python models, XML views, ORM logic, ACLs, record rules, scheduled actions, chatter, QWeb PDF report, and Odoo tests.
+- Odoo-native Python models, XML views, ORM logic, ACLs, record rules, scheduled actions, chatter, QWeb report, demo data, and Odoo tests.
 - Environmental workflows: emission factors, product ESG profiles, carbon transactions, Scope 1/2/3 reporting, verification, goals, and source record drill-down.
 - Social workflows: CSR activities, challenge participation, proof review, XP ledger, badges, rewards, and employee dashboard entry points.
 - Governance workflows: policies, acknowledgements, audits, compliance issues, overdue checks, reminders, and auditor access.
 - Scoring engine: environmental/social/governance scores from 0 to 100, weighted department total, score history, and score explanation.
-- Demo data for departments, employees, factors, transactions, goals, CSR, challenges, policies, audits, compliance issues, rewards, badges, and score history.
 
-## Dependencies
-
-Target version: Odoo Community 19.0.
-
-Required Odoo modules:
+## Required Odoo Dependencies
 
 ```text
 base, web, mail, hr, product, purchase, mrp, fleet, hr_expense
 ```
 
-Required system services:
+## Standard Local Setup
 
-```text
-Python 3.11+ or the Python version required by your Odoo checkout
-PostgreSQL 14+
-```
-
-## 1. Install Python And PostgreSQL Dependencies
-
-Install PostgreSQL from your OS package manager or from the official installer.
-
-Clone Odoo Community locally, then install its Python requirements from the Odoo source directory:
-
-```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install wheel
-pip install -r requirements.txt
-```
-
-On Windows PowerShell:
-
-```powershell
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install wheel
-pip install -r requirements.txt
-```
-
-Install OS libraries required by Odoo for PDF/reporting according to your Odoo platform guide, including PostgreSQL client headers and `wkhtmltopdf` if your Odoo version still uses it for PDF rendering.
-
-## 2. Create The PostgreSQL User
-
-Create a local PostgreSQL role for Odoo:
-
-```bash
-createuser --createdb --username postgres --no-createrole --no-superuser --pwprompt odoo
-```
-
-Use this password for local development:
-
-```text
-odoo
-```
-
-Equivalent SQL:
+1. Install Python and PostgreSQL dependencies required by your Odoo checkout.
+2. Create a PostgreSQL user:
 
 ```sql
 CREATE ROLE odoo WITH LOGIN CREATEDB PASSWORD 'odoo';
 ```
 
-## 3. Configure Odoo
-
-Copy the example config:
-
-```bash
-cp odoo.conf.example odoo.conf
-```
-
-Update `addons_path` so it includes both your Odoo core addons and this repository addon path. Example:
-
-```ini
-addons_path = /path/to/odoo/odoo/addons,/path/to/egs/addons
-http_port = 8069
-db_host = localhost
-db_port = 5432
-db_user = odoo
-db_password = odoo
-logfile = /path/to/odoo.log
-```
-
-On Windows, use absolute Windows paths, for example:
-
-```ini
-addons_path = C:\odoo\odoo\addons,C:\Users\Anuraag S\Downloads\egs\addons
-```
-
-## 4. Start The Odoo Server
-
-From your Odoo source directory:
+3. Copy `odoo.conf.example` to `odoo.conf`.
+4. Update `addons_path` so it includes this repository's `addons` directory.
+5. Start Odoo:
 
 ```bash
-python odoo-bin -c /path/to/egs/odoo.conf
+python odoo-bin -c /path/to/odoo.conf
 ```
 
-On Windows:
+6. Open `http://localhost:8069`.
+7. Create a database with demo data enabled.
+8. Open Apps, update the app list, and install `EcoSphere ESG Management Platform`.
 
-```powershell
-python odoo-bin -c "C:\Users\Anuraag S\Downloads\egs\odoo.conf"
-```
+## Optional Docker Setup
 
-Open:
-
-```text
-http://localhost:8069
-```
-
-## 5. Create The Database
-
-In the Odoo database manager at `http://localhost:8069/web/database/manager`:
-
-1. Create a new database, for example `ecosphere_demo`.
-2. Enable demo data if you want the hackathon walkthrough records.
-3. Set the admin password for the local database.
-
-## 6. Install The EcoSphere Addon
-
-In Odoo:
-
-1. Open Apps.
-2. Activate developer mode if the addon list is cached.
-3. Click Update Apps List.
-4. Search for `EcoSphere ESG Management Platform` or `ecosphere_esg`.
-5. Install the module.
-
-## 7. Load Demo Data
-
-If demo data was enabled at database creation, Odoo loads `addons/ecosphere_esg/data/demo_data.xml` automatically when the module installs.
-
-For an existing database without demo data, start Odoo with demo loading enabled or create a fresh local demo database. The demo includes:
-
-- Logins: `esg_manager / esg_manager`, `esg_auditor / esg_auditor`, `esg_employee / esg_employee`
-- Three departments and ten employees
-- Multiple emission factors and product ESG profiles
-- Carbon transactions, environmental goals, CSR activities, challenges, policies, acknowledgements, audits, compliance issues, badges, rewards, redemptions, and score history
-
-## 8. Open The Platform
-
-Go to:
-
-```text
-http://localhost:8069
-```
-
-Then open the EcoSphere menu. Recommended demo flow:
-
-1. Review carbon transactions and verify pending Scope 3 material emissions.
-2. Open Environmental Goals and refresh progress from verified carbon data.
-3. Approve CSR or challenge submissions and inspect the points ledger.
-4. Acknowledge a policy from the employee account.
-5. Review overdue compliance issues from the auditor or manager account.
-6. Open Score History and print the ESG Summary Report.
-7. Open Action Centre to see rule-based recommendations.
-
-## Optional Docker Compose
-
-Docker is optional. The standard local installation above remains supported.
-
-Start PostgreSQL and Odoo:
+Docker Compose is included for easier local setup:
 
 ```bash
-docker compose up
+docker compose up -d
 ```
 
-The compose file provides:
+It provides:
 
-- `odoo` service on port `8069`
-- `postgres` service
-- `./addons` mounted as a custom addon volume
-- Persistent PostgreSQL and Odoo data volumes
+- Odoo service on port `8069`
+- PostgreSQL service
+- Custom addon volume mounted from `./addons`
+- Persistent Odoo and PostgreSQL volumes
 
-Then open:
-
-```text
-http://localhost:8069
-```
-
-Create a database and install EcoSphere from Apps.
+For one-off Odoo commands in Docker, use `odoo.docker.conf`.
 
 ## Testing
 
-From the Odoo source directory, run:
+From an Odoo environment:
 
 ```bash
-python odoo-bin -c /path/to/egs/odoo.conf -d ecosphere_test --test-enable --stop-after-init -i ecosphere_esg
+python odoo-bin -c /path/to/odoo.conf -d ecosphere_test --test-enable --stop-after-init -i ecosphere_esg
 ```
 
-The test suite covers:
+The test suite covers carbon calculation, duplicate prevention, evidence enforcement, XP awarding, badge awarding, reward balance/stock handling, policy acknowledgement, compliance overdue logic, and score bounds.
 
-- Carbon calculation and duplicate source prevention
-- Evidence enforcement
-- Approval/rejection and XP award only once
-- Badge auto-award
-- Reward balance and stock handling
-- Policy acknowledgement
-- Compliance overdue logic
-- Score calculation bounds
+## Repository Note
 
-## Architecture
-
-EcoSphere uses standard Odoo layers:
-
-- Models in `addons/ecosphere_esg/models`
-- Security groups, ACLs, and record rules in `addons/ecosphere_esg/security`
-- Menus, actions, forms, lists, kanban, calendar, pivot, and graph views in `addons/ecosphere_esg/views`
-- Scheduled actions, email templates, sequences, and demo data in `addons/ecosphere_esg/data`
-- QWeb PDF report in `addons/ecosphere_esg/reports`
-- Odoo transaction tests in `addons/ecosphere_esg/tests`
-
-## Role Matrix
-
-| Role | Access |
-| --- | --- |
-| ESG Employee | Own activities, proof submissions, policy acknowledgements, points, badges, and redemptions |
-| Department ESG Manager | Department operational ESG records and approvals |
-| ESG Manager | Organization-wide ESG data, verification, configuration, scoring, and action centre |
-| ESG Auditor | Audits, policies, compliance issues, and governance evidence |
-| ESG Administrator | Full configuration and administrative access |
-
-## Known Limitations
-
-- Email delivery depends on local outgoing mail configuration.
-- External integrations are intentionally local/offline-safe placeholders through Odoo-native source hooks.
-- XLSX export is not custom-coded; use Odoo list export or add `xlsxwriter`-based report generation as a later enhancement.
-- Odoo 19 should be used where available. If your Docker registry does not yet provide `odoo:19.0`, switch the image and manifest version to the Odoo Community version installed locally.
-
-## Future Improvements
-
-- Add richer OWL dashboards once core workflows are stable.
-- Add custom XLSX exports for each ESG report family.
-- Expand source hooks for more precise purchase, fleet, manufacturing, and expense emission quantities.
-- Add more granular multi-company tests and data-lineage report pages.
+This repository also contains the pre-existing remote addon folder `ecosphere_esg/`. The Docker-validated local hackathon build is in `addons/ecosphere_esg/`.
